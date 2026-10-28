@@ -1,6 +1,8 @@
 import express, { Request, Response } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import { connectDatabase } from './config/database';
+import { seedDatabaseIfEmpty } from './config/seed';
 import { requestsRouter } from './routes/requests';
 import { donorsRouter } from './routes/donors';
 import { hospitalsRouter } from './routes/hospitals';
@@ -25,6 +27,7 @@ app.get('/api/health', (req: Request, res: Response) => {
   res.json({
     status: 'healthy',
     service: 'LifeLink Emergency Blood Donation API',
+    database: 'MongoDB Atlas',
     timestamp: new Date().toISOString()
   });
 });
@@ -35,7 +38,17 @@ app.use('/api/donors', donorsRouter);
 app.use('/api/hospitals', hospitalsRouter);
 app.use('/api/admin', adminRouter);
 
-app.listen(PORT, () => {
-  console.log(`🚑 LifeLink API service running on port ${PORT}`);
-  console.log(`🏥 Health check: http://localhost:${PORT}/api/health`);
-});
+async function startServer() {
+  // Connect to MongoDB Atlas
+  const connected = await connectDatabase();
+  if (connected) {
+    await seedDatabaseIfEmpty();
+  }
+
+  app.listen(PORT, () => {
+    console.log(`🚑 LifeLink API service running on port ${PORT}`);
+    console.log(`🏥 Health check: http://localhost:${PORT}/api/health`);
+  });
+}
+
+startServer();
