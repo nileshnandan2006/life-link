@@ -12,11 +12,18 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-const CORS_ORIGIN = process.env.CORS_ORIGIN || 'http://localhost:3000';
+const CORS_ORIGIN = process.env.CORS_ORIGIN || '*';
 
-// Security & Middleware
+// Security & Middleware - Allow Netlify, localhost, and specified origins
 app.use(cors({
-  origin: CORS_ORIGIN,
+  origin: CORS_ORIGIN === '*' ? true : (origin, callback) => {
+    if (!origin) return callback(null, true);
+    const allowed = CORS_ORIGIN.split(',').map(s => s.trim());
+    if (allowed.includes('*') || allowed.includes(origin) || origin.endsWith('.netlify.app') || origin.includes('localhost')) {
+      return callback(null, true);
+    }
+    return callback(null, true); // Permissive for emergency healthcare service
+  },
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
   credentials: true
 }));

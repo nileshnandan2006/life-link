@@ -1,4 +1,12 @@
 import mongoose from 'mongoose';
+import dns from 'dns';
+
+// Reliable DNS resolution for Atlas SRV records
+try {
+  dns.setServers(['8.8.8.8', '1.1.1.1']);
+} catch {
+  // fallback to system default
+}
 
 export async function connectDatabase(): Promise<boolean> {
   const uri = process.env.MONGODB_URI;
@@ -18,7 +26,9 @@ export async function connectDatabase(): Promise<boolean> {
     return true;
   } catch (error: any) {
     console.error('❌ [MongoDB] Connection error:', error.message);
-    console.warn('⚠️ [MongoDB] Ensure your IP is whitelisted in MongoDB Atlas Network Access (0.0.0.0/0) and cluster address is accurate.');
+    if (error.message.includes('IP that isn\'t whitelisted') || error.message.includes('Could not connect to any servers')) {
+      console.warn('👉 [Action Required in Atlas] Whitelist IP in MongoDB Atlas: Go to Network Access > Add IP Address > Allow Access from Anywhere (0.0.0.0/0).');
+    }
     return false;
   }
 }

@@ -87,6 +87,51 @@ For security compliance, **no sensitive API keys, service credentials, or `.env`
 
 ---
 
+## 🚀 Cloud Deployment Guides
+
+### 🌐 Frontend Deployment on Netlify
+The repository is pre-configured with `netlify.toml` and `_redirects` for single-page application (SPA) routing.
+
+1. Log into **[Netlify](https://app.netlify.com/)** and click **"Add new site" $\rightarrow$ "Import an existing project"**.
+2. Connect **GitHub** and select your repository: `shubhra-071/liife-link`.
+3. Configure the build settings (automatically detected from `netlify.toml`):
+   - **Base directory**: `frontend`
+   - **Build command**: `npm run build`
+   - **Publish directory**: `frontend/dist`
+4. Under **Site configuration > Environment variables**, add your frontend variables:
+   - `VITE_FIREBASE_API_KEY`
+   - `VITE_FIREBASE_AUTH_DOMAIN`
+   - `VITE_FIREBASE_PROJECT_ID`
+   - `VITE_FIREBASE_STORAGE_BUCKET`
+   - `VITE_FIREBASE_MESSAGING_SENDER_ID`
+   - `VITE_FIREBASE_APP_ID`
+   - `VITE_FIREBASE_MEASUREMENT_ID`
+   - `VITE_API_BASE_URL` (set to your deployed Render backend URL, e.g. `https://lifelink-backend.onrender.com/api`)
+5. Click **"Deploy site"**.
+
+---
+
+### ⚡ Backend Deployment on Render
+The repository includes a ready-to-deploy `render.yaml` blueprint.
+
+1. Log into **[Render](https://dashboard.render.com/)** and click **"New +" $\rightarrow$ "Web Service"**.
+2. Connect your repository: `shubhra-071/liife-link`.
+3. Configure the service settings:
+   - **Name**: `lifelink-backend-api`
+   - **Root Directory**: `backend`
+   - **Runtime**: `Node`
+   - **Build Command**: `npm install && npm run build`
+   - **Start Command**: `npm start`
+4. Under **Environment Variables**, add:
+   - `NODE_ENV`: `production`
+   - `PORT`: `10000`
+   - `CORS_ORIGIN`: `*` (or your Netlify site URL)
+   - `MONGODB_URI`: `mongodb+srv://<db_username>:<db_password>@cluster0.ah2ztwo.mongodb.net/lifelink?retryWrites=true&w=majority&appName=Cluster0`
+5. Click **"Create Web Service"**.
+6. Render will automatically install dependencies, build TypeScript (`tsc`), connect to MongoDB Atlas, and start the service with live health checks at `/api/health`.
+
+---
+
 ## 🩺 Core Healthcare Capabilities
 
 ### 1. Blood Requester / Patient Attendant
