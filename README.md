@@ -93,7 +93,7 @@ For security compliance, **no sensitive API keys, service credentials, or `.env`
 The repository is pre-configured with `netlify.toml` and `_redirects` for single-page application (SPA) routing.
 
 1. Log into **[Netlify](https://app.netlify.com/)** and click **"Add new site" $\rightarrow$ "Import an existing project"**.
-2. Connect **GitHub** and select your repository: `shubhra-071/liife-link`.
+2. Connect **GitHub** and select your repository: `nileshnandan2006/life-link`.
 3. Configure the build settings (automatically detected from `netlify.toml`):
    - **Base directory**: `frontend`
    - **Build command**: `npm run build`
@@ -115,7 +115,7 @@ The repository is pre-configured with `netlify.toml` and `_redirects` for single
 The repository includes a ready-to-deploy `render.yaml` blueprint.
 
 1. Log into **[Render](https://dashboard.render.com/)** and click **"New +" $\rightarrow$ "Web Service"**.
-2. Connect your repository: `shubhra-071/liife-link`.
+2. Connect your repository: `nileshnandan2006/life-link`.
 3. Configure the service settings:
    - **Name**: `lifelink-backend-api`
    - **Root Directory**: `backend`
